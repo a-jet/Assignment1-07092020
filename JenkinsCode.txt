@@ -1,0 +1,22 @@
+pipeline {
+   agent any
+
+   tools {
+      maven "M3"
+   }
+
+   stages {
+      stage('Build') {
+         steps {
+            git 'https://github.com/a-jet/Assignment1-07092020.git'
+            bat "mvn -Dmaven.test.failure.ignore=true clean package"
+         }
+         post {
+            success {
+               junit '**/target/surefire-reports/TEST-*.xml'
+               archiveArtifacts 'target/*.jar'
+            }
+         }
+      }
+   }
+}
